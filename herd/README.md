@@ -1,3 +1,7 @@
+1. modify main.h to setup correct client size ()
+2. modify main.h to setup HERD_VALUE_SIZE
+3. modify run-machine.sh to setup update percentage
+
 # HERD
 An improved implementation of the HERD key-value store.
 
