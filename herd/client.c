@@ -99,6 +99,7 @@ void* run_client(void* arg) {
 
   struct mica_op* req_buf = memalign(4096, sizeof(*req_buf));
   assert(req_buf != NULL);
+  struct ibv_mr *key_mr = ibv_reg_mr(cb->pd, req_buf, sizeof(struct mica_op), IBV_ACCESS_LOCAL_WRITE);
 
   struct ibv_send_wr wr, *bad_send_wr;
   struct ibv_sge sgl;
@@ -166,17 +167,19 @@ void* run_client(void* arg) {
     /* Forge the RDMA work request */
     sgl.length = is_update ? HERD_PUT_REQ_SIZE : HERD_GET_REQ_SIZE;
     sgl.addr = (uint64_t)(uintptr_t)req_buf;
+    sgl.lkey = key_mr->lkey;
 
     wr.opcode = IBV_WR_RDMA_WRITE;
     wr.num_sge = 1;
     wr.next = NULL;
     wr.sg_list = &sgl;
+    printf("%d\n", (int)sgl.length);
 
     wr.send_flags = (nb_tx & UNSIG_BATCH_) == 0 ? IBV_SEND_SIGNALED : 0;
     if ((nb_tx & UNSIG_BATCH_) == UNSIG_BATCH_) {
       hrd_poll_cq(cb->conn_cq[0], 1, wc);
     }
-    wr.send_flags |= IBV_SEND_INLINE;
+    //wr.send_flags |= IBV_SEND_INLINE;
 
     wr.wr.rdma.remote_addr =
         mstr_qp->buf_addr +

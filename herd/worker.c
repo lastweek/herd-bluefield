@@ -105,6 +105,10 @@ void* run_worker(void* arg) {
   int ud_qp_i = 0; /* UD QP index: same for both ports */
   long long nb_tx_tot = 0;
   long long nb_post_send = 0;
+  
+  struct mica_op* rep_buf = memalign(4096, sizeof(*rep_buf));
+  assert(rep_buf != NULL);
+  struct ibv_mr *key_mr = ibv_reg_mr(cb[0]->pd, rep_buf, sizeof(struct mica_op), IBV_ACCESS_LOCAL_WRITE);
 
   /*
    * @cb_i is the control block to use for @clt_i's response. If NUM_CLIENTS
@@ -206,7 +210,7 @@ void* run_worker(void* arg) {
       if ((nb_tx[cb_i][ud_qp_i] & UNSIG_BATCH_) == UNSIG_BATCH_) {
         hrd_poll_cq(cb[cb_i]->dgram_send_cq[ud_qp_i], 1, &wc);
       }
-      wr[wr_i].send_flags |= IBV_SEND_INLINE;
+      //wr[wr_i].send_flags |= IBV_SEND_INLINE;
 
       HRD_MOD_ADD(ws[clt_i], WINDOW_SIZE);
 
@@ -231,6 +235,12 @@ void* run_worker(void* arg) {
     for (wr_i = 0; wr_i < nb_new_req_tot; wr_i++) {
       sgl[wr_i].length = resp_arr[wr_i].val_len;
       sgl[wr_i].addr = (uint64_t)(uintptr_t)resp_arr[wr_i].val_ptr;
+      if(op_ptr_arr[wr_i]->opcode == MICA_OP_GET)
+         sgl[wr_i].length = HERD_VALUE_SIZE;
+      else
+         sgl[wr_i].length = 0;
+      sgl[wr_i].addr = (uint64_t)(uintptr_t)rep_buf;
+      sgl[wr_i].lkey = key_mr->lkey;
 
       if (USE_POSTLIST == 0) {
         ret = ibv_post_send(cb[cb_for_wr[wr_i]]->dgram_qp[ud_qp_i], &wr[wr_i],
