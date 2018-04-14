@@ -173,7 +173,6 @@ void* run_client(void* arg) {
     wr.num_sge = 1;
     wr.next = NULL;
     wr.sg_list = &sgl;
-    printf("%d\n", (int)sgl.length);
 
     wr.send_flags = (nb_tx & UNSIG_BATCH_) == 0 ? IBV_SEND_SIGNALED : 0;
     if ((nb_tx & UNSIG_BATCH_) == UNSIG_BATCH_) {
