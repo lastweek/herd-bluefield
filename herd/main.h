@@ -18,7 +18,7 @@
 #define HERD_LOG_CAP (1024 * 1024 * 1024)
 
 #define HERD_NUM_KEYS (8 * 1024 * 1024)
-#define HERD_VALUE_SIZE 256
+#define HERD_VALUE_SIZE 128
 /* Request sizes */
 #define HERD_GET_REQ_SIZE (16 + 1) /* 16 byte key + opcode */
 
@@ -28,7 +28,7 @@
 /* Configuration options */
 #define MAX_SERVER_PORTS 4
 #define NUM_WORKERS 1
-#define NUM_CLIENTS 64
+#define NUM_CLIENTS 128
 
 /* Performance options */
 #define WINDOW_SIZE 1 /* Outstanding requests kept by each client */

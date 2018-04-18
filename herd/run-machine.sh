@@ -29,5 +29,5 @@ sudo LD_LIBRARY_PATH=/usr/local/lib/ -E \
 	--num-server-ports 1 \
 	--num-client-ports 1 \
 	--is-client 1 \
-	--update-percentage 100 \
+	--update-percentage 0 \
 	--machine-id $1 &

@@ -1,6 +1,10 @@
 1. modify main.h to setup correct client size ()
 2. modify main.h to setup HERD_VALUE_SIZE
 3. modify run-machine.sh to setup update percentage
+test on 
+controller=(00)
+clients=(01 03 08 09 10 11 12 13 17 18 20 21 22 23 24 25)
+
 
 # HERD
 An improved implementation of the HERD key-value store.
