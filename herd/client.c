@@ -34,6 +34,34 @@ int* get_random_permutation(int n, int clt_gid, uint64_t* seed) {
 
   return log;
 }
+int test_times = 1000000;
+void get_file(int **op, int**key, int thread_id)
+{
+  int *write_key;
+  int *op_key;
+  FILE *fp;
+  char filepath[32];
+  char * line = NULL;
+  size_t len=0;
+  ssize_t read;
+  int i; 
+  i=0;
+  sprintf(filepath, "workload/workloadb_%d", thread_id);
+  printf("start reading %s\n", filepath);
+  fp=fopen(filepath, "r");
+  op_key = malloc(sizeof(int)*test_times);
+  write_key = malloc(sizeof(int)*test_times);
+  while ((read = getline(&line, &len, fp)) != -1) 
+  {
+          sscanf(line, "%llu %llu\n", (long long unsigned int *)&op_key[i], (long long unsigned int *)&write_key[i]);
+          i++;
+        if(i==test_times)
+                break;
+  }
+  printf("thread-%d finish reading %d\n", thread_id, i);
+  *op = op_key;
+  *key = write_key;
+}
 
 void* run_client(void* arg) {
   int i;
@@ -111,8 +139,9 @@ void* run_client(void* arg) {
   long long rolling_iter = 0; /* For throughput measurement */
   long long nb_tx = 0;        /* Total requests performed or queued */
   int wn = 0;                 /* Worker number */
-
+  int *write_key, *op_key;
   struct timespec start, end;
+  get_file(&write_key, &op_key, clt_gid);
   clock_gettime(CLOCK_REALTIME, &start);
 
   /* Fill the RECV queue */
@@ -155,10 +184,19 @@ void* run_client(void* arg) {
     }
 
     wn = hrd_fastrand(&seed) % NUM_WORKERS; /* Choose a worker */
-    int is_update = (hrd_fastrand(&seed) % 100 < update_percentage) ? 1 : 0;
 
     /* Forge the HERD request */
+    int is_update = (hrd_fastrand(&seed) % 100 < update_percentage) ? 1 : 0;
     key_i = hrd_fastrand(&seed) % HERD_NUM_KEYS; /* Choose a key */
+    if(op_key[nb_tx%test_times] == 1)
+        is_update = 1;
+    else
+        is_update = 0;
+    key_i = write_key[nb_tx%test_times];
+    
+    //int is_update = (op_key[nb_tx%test_times]) ? 1 : 0;
+    //key_i = write_key[nb_tx%test_times];
+
 
     *(uint128*)req_buf = CityHash128((char*)&key_arr[key_i], 4);
     req_buf->opcode = is_update ? HERD_OP_PUT : HERD_OP_GET;
