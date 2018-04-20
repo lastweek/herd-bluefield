@@ -38,7 +38,7 @@ sleep 1
 
 blue "Starting worker threads"
 sudo LD_LIBRARY_PATH=/usr/local/lib/ -E \
-	numactl --physcpubind=0,2,4,6,8,10,12,14,16,18,20,22 --membind=0 ./main \
+	numactl --cpunodebind=0 --membind=0 ./main \
 	--is-client 0 \
 	--base-port-index 0 \
 	--num-server-ports 1 \
