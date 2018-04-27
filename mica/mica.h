@@ -21,7 +21,7 @@
 
 /* Ensure that a mica_op is cacheline aligned */
 #define MICA_MAX_VALUE \
-  (1086 - (sizeof(struct mica_key) + sizeof(uint8_t) + sizeof(uint8_t)))
+  (2110 - (sizeof(struct mica_key) + sizeof(uint8_t) + sizeof(uint8_t)))
 #define MICA_LOG_BITS 40
 
 #define MICA_INDEX_SHM_KEY 3185

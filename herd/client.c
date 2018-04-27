@@ -46,7 +46,7 @@ void get_file(int **op, int**key, int thread_id)
   ssize_t read;
   int i; 
   i=0;
-  sprintf(filepath, "workload/workloadb_%d", thread_id);
+  sprintf(filepath, "workload/zipfworkload/workload100_%d", thread_id);
   printf("start reading %s\n", filepath);
   fp=fopen(filepath, "r");
   op_key = malloc(sizeof(int)*test_times);
