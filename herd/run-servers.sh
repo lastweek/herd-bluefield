@@ -5,7 +5,7 @@ function blue() {
 	echo "${es}$1${ee}"
 }
 
-export HRD_REGISTRY_IP="10.0.0.75"
+export HRD_REGISTRY_IP="10.0.0.73"
 export MLX5_SINGLE_THREADED=1
 
 blue "Removing SHM key 24 (request region hugepages)"

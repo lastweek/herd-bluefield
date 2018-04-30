@@ -226,11 +226,14 @@ void mica_batch_op(struct mica_kv* kv, int n, struct mica_op** op,
           kv->num_get_op++;
 
           resp[I].type = MICA_RESP_GET_SUCCESS;
-          resp[I].val_len = kv_ptr[I]->val_len;
+          //resp[I].val_len = kv_ptr[I]->val_len;
+          resp[I].val_len = MICA_HERD_VALUE_SIZE;
           resp[I].val_ptr = kv_ptr[I]->value;
         } else {
           kv->num_put_op++;
           /* Update the value in the log */
+          op[I]->val_len = MICA_HERD_VALUE_SIZE;
+          kv_ptr[I]->val_len = MICA_HERD_VALUE_SIZE;
           assert(op[I]->val_len == kv_ptr[I]->val_len);
           memcpy(kv_ptr[I]->value, op[I]->value, kv_ptr[I]->val_len);
 

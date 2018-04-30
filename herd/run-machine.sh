@@ -5,7 +5,7 @@ function blue() {
 	echo "${es}$1${ee}"
 }
 
-export HRD_REGISTRY_IP="10.0.0.75"
+export HRD_REGISTRY_IP="10.0.0.73"
 export MLX5_SINGLE_THREADED=1
 
 if [ "$#" -ne 1 ]; then
@@ -29,5 +29,5 @@ sudo LD_LIBRARY_PATH=/usr/local/lib/ -E \
 	--num-server-ports 1 \
 	--num-client-ports 1 \
 	--is-client 1 \
-	--update-percentage 0 \
+	--update-percentage 50 \
 	--machine-id $1 &

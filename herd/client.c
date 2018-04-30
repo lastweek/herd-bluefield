@@ -141,7 +141,7 @@ void* run_client(void* arg) {
   int wn = 0;                 /* Worker number */
   int *write_key, *op_key;
   struct timespec start, end;
-  get_file(&write_key, &op_key, clt_gid);
+  get_file(&op_key, &write_key, clt_gid);
   clock_gettime(CLOCK_REALTIME, &start);
 
   /* Fill the RECV queue */
@@ -193,6 +193,8 @@ void* run_client(void* arg) {
     else
         is_update = 0;
     key_i = write_key[nb_tx%test_times];
+
+    //printf("%d %d\n", is_update, key_i);
     
     //int is_update = (op_key[nb_tx%test_times]) ? 1 : 0;
     //key_i = write_key[nb_tx%test_times];

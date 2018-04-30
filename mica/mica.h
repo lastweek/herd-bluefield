@@ -19,9 +19,11 @@
 #define MICA_RESP_GET_SUCCESS 114
 #define MICA_RESP_GET_FAIL 115
 
+#define MICA_HERD_VALUE_SIZE 256
+
 /* Ensure that a mica_op is cacheline aligned */
 #define MICA_MAX_VALUE \
-  (2110 - (sizeof(struct mica_key) + sizeof(uint8_t) + sizeof(uint8_t)))
+  (2102 - (sizeof(struct mica_key) + sizeof(uint8_t) + sizeof(uint32_t)))
 #define MICA_LOG_BITS 40
 
 #define MICA_INDEX_SHM_KEY 3185
@@ -37,8 +39,9 @@
 
 struct mica_resp {
   uint8_t type;
-  uint8_t val_len;
-  uint16_t unused[3]; /* Make val_ptr 8-byte aligned */
+  uint32_t val_len;
+  uint16_t unused[1]; /* Make val_ptr 8-byte aligned */
+  uint8_t unused2[1]; /* Make val_ptr 8-byte aligned */
   uint8_t* val_ptr;
 };
 
@@ -53,7 +56,7 @@ struct mica_key {
 struct mica_op {
   struct mica_key key; /* This must be the 1st field and 16B aligned */
   uint8_t opcode;
-  uint8_t val_len;
+  uint32_t val_len;
   uint8_t value[MICA_MAX_VALUE];
 };
 

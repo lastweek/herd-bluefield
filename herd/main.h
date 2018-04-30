@@ -19,7 +19,7 @@
 
 //#define HERD_NUM_KEYS (8 * 1024 * 1024)
 #define HERD_NUM_KEYS (100000)
-#define HERD_VALUE_SIZE 1024
+#define HERD_VALUE_SIZE MICA_HERD_VALUE_SIZE
 /* Request sizes */
 #define HERD_GET_REQ_SIZE (16 + 1) /* 16 byte key + opcode */
 
@@ -28,11 +28,11 @@
 
 /* Configuration options */
 #define MAX_SERVER_PORTS 4
-#define NUM_WORKERS 8
+#define NUM_WORKERS 1
 #define NUM_CLIENTS 64
 
 /* Performance options */
-#define WINDOW_SIZE 32 /* Outstanding requests kept by each client */
+#define WINDOW_SIZE 1 /* Outstanding requests kept by each client */
 #define NUM_UD_QPS 1   /* Number of UD QPs per port */
 #define USE_POSTLIST 1
 
