@@ -1,6 +1,6 @@
 prefix="wuklab"
 controller=(23)
-clients=(10 11 17 18 20 21 22 24)
+clients=(20 21 22 24)
 
 pass_others=(${controller[@]} ${clients[@]})
 path="sy/rdma_bench/herd"
