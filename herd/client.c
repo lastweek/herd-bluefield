@@ -46,7 +46,8 @@ void get_file(int **op, int**key, int thread_id)
   ssize_t read;
   int i; 
   i=0;
-  sprintf(filepath, "workload/zipfworkload/workload100_%d", thread_id);
+  //sprintf(filepath, "workload/zipfworkload/workload100_%d", thread_id);
+  sprintf(filepath, "workload/workloada_%d", (int)thread_id);
   printf("start reading %s\n", filepath);
   fp=fopen(filepath, "r");
   op_key = malloc(sizeof(int)*test_times);
@@ -184,6 +185,7 @@ void* run_client(void* arg) {
     }
 
     wn = hrd_fastrand(&seed) % NUM_WORKERS; /* Choose a worker */
+    //wn = 0;
 
     /* Forge the HERD request */
     int is_update = (hrd_fastrand(&seed) % 100 < update_percentage) ? 1 : 0;

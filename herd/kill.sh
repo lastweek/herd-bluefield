@@ -6,6 +6,6 @@ ps aux | grep $path | awk '{print $2}' | xargs kill -9
 for VARIABLE in "${pass_others[@]}"
 do
         VARI="$prefix$VARIABLE"
-        ssh -t $VARI -t "cd $path ; sh kill.sh" &
+        ssh -t $VARI -t "cd $path ; sh pkill.sh" &
 done
 wait
