@@ -28,7 +28,8 @@
 
 /* Configuration options */
 #define MAX_SERVER_PORTS 4
-#define NUM_WORKERS 12
+#define NUM_WORKERS 2//if you want to test single cpu, change this to 1 and enable sole_worker
+#define SOLE_WORKER //if we change workers to 1 directly, herd will crash
 #define NUM_CLIENTS 32
 
 /* Performance options */

@@ -1,6 +1,6 @@
 prefix="wuklab"
-controller=(21)
-clients=(22 23 24 25)
+controller=(20)
+clients=(21 22 23 24 25)
 
 pass_others=(${controller[@]} ${clients[@]})
 path="sy/HERD/herd"

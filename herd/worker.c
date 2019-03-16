@@ -126,6 +126,13 @@ void* run_worker(void* arg) {
 
   struct timespec start, end;
   clock_gettime(CLOCK_REALTIME, &start);
+  #ifdef SOLE_WORKER
+  if(wrkr_lid!=0)
+  {
+    while(1)
+      sleep(1);
+  }
+  #endif
   while (1) {
     if (unlikely(rolling_iter >= M_4)) {
       clock_gettime(CLOCK_REALTIME, &end);
