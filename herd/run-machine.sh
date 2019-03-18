@@ -5,7 +5,7 @@ function blue() {
 	echo "${es}$1${ee}"
 }
 
-export HRD_REGISTRY_IP="10.0.0.120"
+export HRD_REGISTRY_IP="10.0.0.121"
 export MLX5_SINGLE_THREADED=1
 
 if [ "$#" -ne 1 ]; then
@@ -17,7 +17,7 @@ fi
 blue "Removing hugepages"
 shm-rm.sh 1>/dev/null 2>/dev/null
 
-num_threads=8		# Threads per client machine
+num_threads=2		# Threads per client machine
 : ${HRD_REGISTRY_IP:?"Need to set HRD_REGISTRY_IP non-empty"}
 
 blue "Running $num_threads client threads"

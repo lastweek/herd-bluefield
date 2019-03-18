@@ -230,7 +230,6 @@ void* run_worker(void* arg) {
         break;
       }
     }
-
     mica_batch_op(&kv, wr_i, op_ptr_arr, resp_arr);
 
     /*

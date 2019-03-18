@@ -25,6 +25,14 @@
 #define MICA_MAX_VALUE \
   (1078 - (sizeof(struct mica_key) + sizeof(uint8_t) + sizeof(uint32_t)))
 #define MICA_LOG_BITS 40
+//latency experiment
+//182 for 128
+//310 for 256
+//566 for 512
+//1078 for 1024
+//2102 for 2048
+//4026 for 3972
+//4150 for 4096
 
 #define MICA_INDEX_SHM_KEY 3185
 #define MICA_LOG_SHM_KEY 4185
