@@ -28,17 +28,17 @@
 
 /* Configuration options */
 #define MAX_SERVER_PORTS 4
-#define NUM_WORKERS 2//if you want to test single cpu, change this to 1 and enable sole_worker
+#define NUM_WORKERS 12//if you want to test single cpu, change this to 1 and enable sole_worker
 #define SOLE_WORKER //if we change workers to 1 directly, herd will crash
-#define NUM_CLIENTS 2
-#define TEST_LATENCY //set num_clients 2, sole_worker, num_workers 2, window_size 1, unsig_batch 2
+#define NUM_CLIENTS 8
+//#define TEST_LATENCY //set num_clients 2, sole_worker, num_workers 2, window_size 1, unsig_batch 2
 
 /* Performance options */
-#define WINDOW_SIZE 1 /* Outstanding requests kept by each client */
+#define WINDOW_SIZE 32 /* Outstanding requests kept by each client */
 #define NUM_UD_QPS 1   /* Number of UD QPs per port */
 #define USE_POSTLIST 1
 
-#define UNSIG_BATCH 2 /* XXX Check if increasing this helps */
+#define UNSIG_BATCH 64 /* XXX Check if increasing this helps */
 #define UNSIG_BATCH_ (UNSIG_BATCH - 1)
 
 /* SHM key for the 1st request region created by master. ++ for other RRs.*/
