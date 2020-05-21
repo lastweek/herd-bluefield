@@ -5,7 +5,7 @@ function blue() {
 	echo "${es}$1${ee}"
 }
 
-export HRD_REGISTRY_IP="10.0.0.121"
+export HRD_REGISTRY_IP="128.46.115.103"
 export MLX5_SINGLE_THREADED=1
 
 blue "Removing SHM key 24 (request region hugepages)"
@@ -22,8 +22,8 @@ done
 : ${HRD_REGISTRY_IP:?"Need to set HRD_REGISTRY_IP non-empty"}
 
 blue "Reset server QP registry"
-sudo killall memcached
-memcached -u root -l 0.0.0.0 1>/dev/null 2>/dev/null &
+#sudo killall memcached
+#memcached -u root -l 0.0.0.0 1>/dev/null 2>/dev/null &
 sleep 1
 
 blue "Starting master process"

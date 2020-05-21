@@ -55,7 +55,7 @@ void* run_worker(void* arg) {
   for (i = 0; i < NUM_CLIENTS; i++) {
     /* Compute the control block and physical port index for client @i */
     int cb_i = i % num_server_ports;
-    int local_port_i = base_port_index + cb_i;
+    //int local_port_i = base_port_index + cb_i;
 
     char clt_name[HRD_QP_NAME_SIZE];
     sprintf(clt_name, "client-dgram-%d", i);
@@ -78,7 +78,8 @@ void* run_worker(void* arg) {
         .sl = 0,
         .src_path_bits = 0,
         /* port_num (> 1): device-local port for responses to this client */
-        .port_num = local_port_i + 1,
+        //.port_num = local_port_i + 1,
+        .port_num = 1,
     };
 
     ah[i] = ibv_create_ah(cb[cb_i]->pd, &ah_attr);
@@ -139,7 +140,7 @@ void* run_worker(void* arg) {
       double seconds = (end.tv_sec - start.tv_sec) +
                        (double)(end.tv_nsec - start.tv_nsec) / 1000000000;
       printf(
-          "main: Worker %d: %.2f IOPS. Avg per-port postlist = %.2f. "
+          "main: Worker %d:\t%.2f\tIOPS. Avg per-port postlist = %.2f. "
           "HERD lookup fail rate = %.4f\n",
           wrkr_lid, M_4 / seconds, (double)nb_tx_tot / nb_post_send,
           (double)kv.num_get_fail / kv.num_get_op);

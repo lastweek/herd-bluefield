@@ -19,7 +19,7 @@
 #define MICA_RESP_GET_SUCCESS 114
 #define MICA_RESP_GET_FAIL 115
 
-#define MICA_HERD_VALUE_SIZE 1016
+#define MICA_HERD_VALUE_SIZE 1024
 
 /* Ensure that a mica_op is cacheline aligned */
 #define MICA_MAX_VALUE \

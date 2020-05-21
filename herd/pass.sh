@@ -6,7 +6,9 @@ ps aux | grep $path | awk '{print $2}' | xargs kill -9
 for VARIABLE in "${pass_others[@]}"
 do
         VARI="$prefix$VARIABLE"
+        echo $VARI:$path
         scp -q -P 456 cpu.sh worker.c main.h client.c main.c run-machine.sh run-servers.sh pre-run.sh pkill.sh setup.json $VARI:$path &
+        echo -q -P 456 cpu.sh worker.c main.h client.c main.c run-machine.sh run-servers.sh pre-run.sh pkill.sh setup.json $VARI:$path &
         scp -q -P 456 ../mica/mica.h ../mica/mica.c $VARI:$path/../mica/ &
         echo finish $VARI
 done

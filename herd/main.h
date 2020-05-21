@@ -29,10 +29,14 @@
 /* Configuration options */
 #define MAX_SERVER_PORTS 4
 #define NUM_WORKERS 12//if you want to test single cpu, change this to 1 and enable sole_worker
-#define SOLE_WORKER //if we change workers to 1 directly, herd will crash
-#define NUM_CLIENTS 8
+//#define SOLE_WORKER //if we change workers to 1 directly, herd will crash
+#define NUM_CLIENTS 64
 //#define TEST_LATENCY //set num_clients 2, sole_worker, num_workers 2, window_size 1, unsig_batch 2
-
+#ifdef TEST_LATENCY
+    #define TEST_LATENCY_WRITE 1
+    #define TEST_LATENCY_READ 0
+    #define TEST_LATENCY_MODE TEST_LATENCY_WRITE
+#endif
 /* Performance options */
 #define WINDOW_SIZE 32 /* Outstanding requests kept by each client */
 #define NUM_UD_QPS 1   /* Number of UD QPs per port */

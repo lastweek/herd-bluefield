@@ -47,7 +47,8 @@ void get_file(int **op, int**key, int thread_id)
   int i; 
   i=0;
   //sprintf(filepath, "workload/zipfworkload/workload100_%d", thread_id);
-  sprintf(filepath, "workload/workloadb_%d", (int)thread_id);
+  //sprintf(filepath, "workload/workloadb_%d", (int)thread_id);
+  sprintf(filepath, "workload/workloada_%d", (int)thread_id);
   printf("start reading %s\n", filepath);
   fp=fopen(filepath, "r");
   op_key = malloc(sizeof(int)*test_times);
@@ -205,7 +206,7 @@ void* run_client(void* arg) {
     key_i = write_key[nb_tx%test_times];
 
     #ifdef TEST_LATENCY
-    is_update = 0;
+    is_update = TEST_LATENCY_MODE;
     key_i = 1;
     #endif
 

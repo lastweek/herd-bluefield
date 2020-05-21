@@ -209,9 +209,9 @@ static inline uint32_t hrd_fastrand(uint64_t* seed) {
 }
 
 static inline long long hrd_get_cycles() {
-  unsigned low, high;
+  unsigned low=0, high=0;
   unsigned long long val;
-  asm volatile("rdtsc" : "=a"(low), "=d"(high));
+  //asm volatile("rdtsc" : "=a"(low), "=d"(high));
   val = high;
   val = (val << 32) | low;
   return val;
