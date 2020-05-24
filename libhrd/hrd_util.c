@@ -132,6 +132,9 @@ struct ibv_device* hrd_resolve_port_index(struct hrd_ctrl_blk* cb,
 /* Allocate SHM with @shm_key, and save the shmid into @shm_id_ret */
 void* hrd_malloc_socket(int shm_key, int size, int socket_id) {
   int shmid = shmget(shm_key, size, IPC_CREAT | IPC_EXCL | 0666);
+
+  printf("%s: key %d size %d\n", __func__, shm_key, size);
+
   if (shmid == -1) {
     switch (errno) {
       case EACCES:

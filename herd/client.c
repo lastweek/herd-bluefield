@@ -143,7 +143,7 @@ void* run_client(void* arg) {
   int wn = 0;                 /* Worker number */
   int *write_key, *op_key;
   struct timespec start, end;
-  get_file(&op_key, &write_key, clt_gid);
+  //get_file(&op_key, &write_key, clt_gid);
   clock_gettime(CLOCK_REALTIME, &start);
 
   /* Fill the RECV queue */
@@ -151,11 +151,10 @@ void* run_client(void* arg) {
     hrd_post_dgram_recv(cb->dgram_qp[0], (void*)cb->dgram_buf, DGRAM_BUF_SIZE,
                         cb->dgram_buf_mr->lkey);
   }
-  #ifdef TEST_LATENCY
+  #if 1
   if(clt_gid!=0)
   {
-    while(1)
-      sleep(1);
+      sleep(1000000);
   }
   #endif
   while (1) {
@@ -163,8 +162,8 @@ void* run_client(void* arg) {
       clock_gettime(CLOCK_REALTIME, &end);
       double seconds = (end.tv_sec - start.tv_sec) +
                        (double)(end.tv_nsec - start.tv_nsec) / 1000000000;
-      printf("main: Client %d: %.2f IOPS. nb_tx = %lld\n", clt_gid,
-             K_512 / seconds, nb_tx);
+      printf("main: Client %d: %.2f IOPS. nb_tx = %lld avg %f ns\n", clt_gid,
+             K_512 / seconds, nb_tx, seconds/K_512*1000000000);
 
       rolling_iter = 0;
 
@@ -188,33 +187,17 @@ void* run_client(void* arg) {
     }
 
     if (nb_tx % WINDOW_SIZE == 0 && nb_tx > 0) {
+      //printf("%d before cq\n", clt_gid);
       hrd_poll_cq(cb->dgram_recv_cq[0], WINDOW_SIZE, wc);
+      //printf("%d after cq\n", clt_gid);
     }
 
     wn = hrd_fastrand(&seed) % NUM_WORKERS; /* Choose a worker */
-    #ifdef SOLE_WORKER
-    wn = 0;
-    #endif
 
-    /* Forge the HERD request */
-    int is_update = (hrd_fastrand(&seed) % 100 < update_percentage) ? 1 : 0;
-    key_i = hrd_fastrand(&seed) % HERD_NUM_KEYS; /* Choose a key */
-    if(op_key[nb_tx%test_times] == 1)
-        is_update = 1;
-    else
-        is_update = 0;
-    key_i = write_key[nb_tx%test_times];
+    int is_update;
 
-    #ifdef TEST_LATENCY
-    is_update = TEST_LATENCY_MODE;
+    is_update = 1;
     key_i = 1;
-    #endif
-
-    //printf("%d %d\n", is_update, key_i);
-    
-    //int is_update = (op_key[nb_tx%test_times]) ? 1 : 0;
-    //key_i = write_key[nb_tx%test_times];
-
 
     *(uint128*)req_buf = CityHash128((char*)&key_arr[key_i], 4);
     req_buf->opcode = is_update ? HERD_OP_PUT : HERD_OP_GET;
@@ -234,11 +217,9 @@ void* run_client(void* arg) {
     if ((nb_tx & UNSIG_BATCH_) == UNSIG_BATCH_) {
       hrd_poll_cq(cb->conn_cq[0], 1, wc);
     }
-    //wr.send_flags |= IBV_SEND_INLINE;
+   // wr.send_flags |= IBV_SEND_INLINE;
 
-    wr.wr.rdma.remote_addr =
-        mstr_qp->buf_addr +
-        OFFSET(wn, clt_gid, ws[wn]) * sizeof(struct mica_op);
+    wr.wr.rdma.remote_addr = mstr_qp->buf_addr + OFFSET(wn, clt_gid, ws[wn]) * sizeof(struct mica_op);
     wr.wr.rdma.rkey = mstr_qp->rkey;
 
     ret = ibv_post_send(cb->conn_qp[0], &wr, &bad_send_wr);

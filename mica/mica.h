@@ -19,11 +19,11 @@
 #define MICA_RESP_GET_SUCCESS 114
 #define MICA_RESP_GET_FAIL 115
 
-#define MICA_HERD_VALUE_SIZE 1024
+#define MICA_HERD_VALUE_SIZE		4
 
 /* Ensure that a mica_op is cacheline aligned */
-#define MICA_MAX_VALUE \
-  (1078 - (sizeof(struct mica_key) + sizeof(uint8_t) + sizeof(uint32_t)))
+#define MICA_MAX_VALUE MICA_HERD_VALUE_SIZE
+
 #define MICA_LOG_BITS 40
 //latency experiment
 //182 for 128
@@ -48,8 +48,8 @@
 struct mica_resp {
   uint8_t type;
   uint32_t val_len;
-  uint16_t unused[1]; /* Make val_ptr 8-byte aligned */
-  uint8_t unused2[1]; /* Make val_ptr 8-byte aligned */
+  //uint16_t unused[1]; /* Make val_ptr 8-byte aligned */
+  //uint8_t unused2[1]; /* Make val_ptr 8-byte aligned */
   uint8_t* val_ptr;
 };
 
@@ -66,7 +66,7 @@ struct mica_op {
   uint8_t opcode;
   uint32_t val_len;
   uint8_t value[MICA_MAX_VALUE];
-};
+} __attribute__((aligned(64)));
 
 struct mica_slot {
   uint32_t in_use : 1;
